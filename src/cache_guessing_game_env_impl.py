@@ -190,7 +190,7 @@ class CacheGuessingGameEnv(gym.Env):
     ''' 
     self.vprint('Initializing...')
     self.l1 = self.hierarchy['cache_1']
-    self.lv = self.hierarchy['cache_1']
+
 
     self.current_step = 0
     self.victim_accessed = False
@@ -246,7 +246,7 @@ class CacheGuessingGameEnv(gym.Env):
         if True: #self.configs['cache_1']["rep_policy"] == "plru_pl": no need to distinuish pl and normal rep_policy
           if self.victim_address <= self.victim_address_max:
             self.vprint("victim access (hex) %x " % self.victim_address)
-            t, _ = self.lv.read(hex(self.victim_address)[2:], self.current_step)#, domain_id='v')
+            t, _ = self.l1.read(hex(self.victim_address)[2:], self.current_step)#, domain_id='v')
             t = t.time # do not need to lock again
           else:
             self.vprint("victim make a empty access!") # do not need to actually do something
@@ -348,8 +348,8 @@ class CacheGuessingGameEnv(gym.Env):
     self.vprint('Reset...(also the cache state)')
     self.hierarchy = build_hierarchy(self.configs, self.logger)
     self.l1 = self.hierarchy['cache_1']
-    # check multicore
-    self.lv = self.hierarchy['cache_1']
+
+              
     self._randomize_cache()
     self._reset(victim_address)  # fake reset
 
