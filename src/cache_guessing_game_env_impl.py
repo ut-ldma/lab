@@ -280,7 +280,7 @@ class CacheGuessingGameEnv(gym.Env):
               reward = self.wrong_reward #-9999
               done = True
         elif is_flush == False:
-          lat, _ = self.l1.read(hex(int('0x' + address, 16))[2:], self.current_step)#, domain_id='a')
+          lat, _ = self.l1.read(hex(int('0x' + address, 16))[2:], self.current_step)
           lat = lat.time # measure the access latency
           if lat > 500:
             self.vprint("access (hex) " + address + " miss")
@@ -292,11 +292,11 @@ class CacheGuessingGameEnv(gym.Env):
           reward = self.step_reward #-1 
           done = False
         else:  # is_flush == True  
-          ### remove for student to add 
-          #print_cache(self.lv)
-          self.lv.clflush(hex(int('0x' + address, 16))[2:], self.current_step)#, domain_id='X')
+          #### what l1 API should be used here?
+
+          ### 
           self.vprint("clflush (hex) " + hex(int('0x' + address, 16))[2:] )
-          #print_cache(self.lv)
+
           r = 2
           self.current_step += 1
           reward = self.step_reward
