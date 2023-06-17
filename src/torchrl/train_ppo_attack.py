@@ -45,6 +45,7 @@ def main(cfg):
 
     # ========= Save config ========= #
     # save the config
+    os.makedirs(f"{HERE}/saved_{logger.exp_name}", exist_ok=True)
     torch.save(cfg, f"{HERE}/saved_{logger.exp_name}/cfg.pt")
 
     # ========= Extract config params (for efficiency) ========= #
@@ -88,11 +89,10 @@ def main(cfg):
 
     # ========= Replay buffer ========= #
     rb = TensorDictReplayBuffer(
-        storage=LazyTensorStorage(replay_buffer_size, device="cpu"),
+        storage=LazyTensorStorage(replay_buffer_size, device=device),
         sampler=SamplerWithoutReplacement(),
         batch_size=batch_size,
         prefetch=prefetch,
-        collate_fn=lambda data: data.clone().to(device, non_blocking=True),
     )
 
     # ========= Isolate model components ========= #
@@ -160,7 +160,7 @@ def main(cfg):
         # dimension to time.
         # We just need to make sure that trajectories are marked as finished
         # when truncated
-        data[..., -1]['next', 'done'] = True
+        data['next', 'done'][..., -1, :] = True
         data = data.reshape(-1)  # [time x others]
 
         episode_reward = data.get(("next", "episode_reward"))[

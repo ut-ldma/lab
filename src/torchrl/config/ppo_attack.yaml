@@ -7,8 +7,8 @@ logger:
 
 collector:
   total_frames: 1_000_000
-  frames_per_batch: 16384
-  num_workers: 32
+  frames_per_batch: 8192
+  num_workers: 8
   envs_per_collector:
   preemptive_threshold: 1.0
   device: "cuda"
@@ -24,9 +24,9 @@ optimizer:
 loss:
   entropy_coeff: 0.02
   clip_grad_norm: 1000.0
-  loss_critic_type: l2
+  loss_critic_type: smooth_l1
 
-num_epochs: 5
+num_epochs: 10
 
 seed: null
 
